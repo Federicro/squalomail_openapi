@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.squalomail.com/mc/v3",
+      "url": "https://api.squalomail.com/v1",
       "description": "Endpoint base per le chiamate System API"
     }
   ],
