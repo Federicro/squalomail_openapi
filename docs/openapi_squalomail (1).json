@@ -1,0 +1,128 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "SqualoMail System API",
+    "version": "1.0.0",
+    "description": "OpenAPI specification per le API di System (Marketing Cloud) di SqualoMail"
+  },
+  "servers": [
+    {
+      "url": "https://api.squalomail.com/v1",
+      "description": "Endpoint base per le chiamate System API"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey"
+      }
+    },
+    "schemas": {
+      "SubscribeRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "listIds": {
+            "type": "array",
+            "items": { "type": "integer" }
+          }
+        },
+        "required": ["email", "listIds"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      },
+      "SubscribeResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "recipientId": { "type": "string" },
+              "status": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/system/subscribe-recipient-by-email": {
+      "post": {
+        "summary": "Iscrive un indirizzo email a una o più liste",
+        "operationId": "subscribeRecipient",
+        "security": [ { "ApiKeyAuth": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SubscribeRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Iscrizione riuscita",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SubscribeResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Errore di validazione o di business",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Iscrive via query string (GET)",
+        "operationId": "subscribeRecipientGet",
+        "security": [ { "ApiKeyAuth": [] } ],
+        "parameters": [
+          { "in": "query", "name": "email", "schema": { "type": "string", "format": "email" }, "required": true },
+          { "in": "query", "name": "listIds", "schema": { "type": "array", "items": { "type": "integer" } }, "required": true }
+        ],
+        "responses": {
+          "200": { "description": "Iscrizione via GET riuscita" }
+        }
+      }
+    },
+    "/system/get-lists": {
+      "get": {
+        "summary": "Recupera le liste di destinazione disponibili",
+        "operationId": "getLists",
+        "security": [ { "ApiKeyAuth": [] } ],
+        "responses": {
+          "200": {
+            "description": "Elenco delle mailing list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lists": {
+                      "type": "array",
+                      "items": { "type": "object", "properties": { "id": { "type": "integer" }, "name": { "type": "string" } } }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
