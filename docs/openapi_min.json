@@ -1,0 +1,26 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "SqualoMail Test API",
+    "version": "1.0.0",
+    "description": "Specifica minimale per validare il collegamento con Nordcraft"
+  },
+  "servers": [
+    {
+      "url": "https://api.squalomail.com/v1",
+      "description": "Base URL API"
+    }
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "summary": "Endpoint di test",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}
